@@ -2,7 +2,7 @@
   "profiles": {
     "AutomateJob": {
       "commandName": "Project",
-      "commandLineArgs": "-i=Ids.xlsx -s=50mb.xlsx -e=Name,Email,Phone,Company,\"Job Title\""
+      "commandLineArgs": "-i=Ids.xlsx -s=customers.xlsx -e=customerNumber,customerName,phone,addressLine1,addressLine2,state,postalCode"
     }
   }
 }

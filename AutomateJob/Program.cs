@@ -52,7 +52,10 @@ foreach (var column in columns)
 {
     var header = column.Cell(1).GetValue<string>();
     var data = column.CellsUsed().Skip(1).Select(c => c.GetValue<string>()).ToList();
-    fields.Add(header, data);
+    if (data.Count > 0)
+    {
+        fields.Add(header, data);
+    }
 }
 
 var conditions = new List<PrimitiveDataFrameColumn<bool>>();
@@ -87,13 +90,15 @@ if (conditions.Count > 0)
     dataFrame = dataFrame.Filter(combinedMask);
 }
 
-var output = dataFrame.ToDataFrame(outputColumns.ToArray()).ToTable();
+var output = dataFrame.ToDataFrame(-1, outputColumns.ToArray()).ToTable();
 // Display the DataFrame
 var resultBook = new XLWorkbook();
-resultBook.Worksheets.Add(output, "output");
-resultBook.SaveAs("results.xlsx");
-Console.WriteLine(dataFrame);
-
+var ws = resultBook.Worksheets.Add(output, "output");
+ws.Table(0).ShowAutoFilter = false;
+ws.Table(0).Theme = XLTableTheme.None;
+ws.Columns().AdjustToContents();
+resultBook.SaveAs($"{sourceFile.Split('.')[0]}_results.xlsx");
+Console.WriteLine("Filter extracted successfully.");
 
 
 
